@@ -1,6 +1,7 @@
 const readLine = require('readline');
 const fs = require("fs")
 const path = require('path');
+require('./default');
 const rl = readLine.createInterface({
     output:process.stdout,
     input:process.stdin
@@ -26,12 +27,13 @@ async function asker()
     let type = await askSync("Gas or water?")
     let date = await askSync("What date?")
     rl.close();
+    console.log(name)
     let result = {
         name, data, type, date: new Date()
     }
 
      
-    fs.writeFileSync(path.join(__dirname, `./dist/${Date.now()}answer.json`), JSON.stringify(result), ()=> console.log('written'))
+    fs.writeFileSync(path.join(__dirname, `./dist/1.json`), JSON.stringify(result), ()=> console.log('written'))
 
 }
 asker()
