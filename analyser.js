@@ -1,5 +1,3 @@
-
-
 const fs = require('fs');
 const readline = require('readline');
 const path = require('path');
@@ -9,10 +7,10 @@ function analyse(arrData) {
         if(!accObj[currentItem.Username]) {
             accObj[currentItem.Username] = []
         }
-        accObj[currentItem.Username].push(`${currentItem.Date} - ${currentItem.Data}`)
+        accObj[currentItem.Username].push(`${currentItem.Date} | type ${currentItem.Type} | data ${currentItem.Data}`)
         return accObj
     }, {})
-    console.log('User Map', userMap)
+    return userMap
 }
 
 var readGas = new Promise((resolve, reject) => {
@@ -56,7 +54,15 @@ var readWater = new Promise((resolve, reject) => {
 const dataGas =[];
 const dataWater =[];
 
-Promise.all([readGas, readWater]).then(() => {             
-    analyse(dataGas);
-    analyse(dataWater);
+function printData(userMap) {
+    Object.entries(userMap).map(entry => {
+        console.log(`User - ${entry[0]}, count - ${entry[1].length}`)
+        entry[1].forEach(data => console.log(data))
+    })
+}
+
+Promise.all([readGas, readWater]).then(() => {              //ждём чтения обоих файлов
+    const arr = dataGas.concat(dataWater);
+    const userMap = analyse(arr);
+    printData(userMap);
 });
